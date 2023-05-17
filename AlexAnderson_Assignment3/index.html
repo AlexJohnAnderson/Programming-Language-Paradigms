@@ -1,0 +1,51 @@
+<!--The first line denotes the title of my html code. The <tab-panel>
+	portion creates three div ID's that we can reference in order to 
+	store our tabs in the form of buttons. This portion also contains text
+	that will be displayed when a tab is clicked. Then, script is used to 
+	denote js code is about to follow. The function asTabs takes in a node 
+	and first creates a map of its children onto a shallow cody of an array.
+	In this function, the buttons are created and each button is attributed 
+	with a tab. Then, when a button is clicked it will return what is in the 
+	respective tab using the function selectTab. selectTab takes in a 
+	selected tab and firstly presents one of the original chilren of the node.
+	Then, changes the clicked tab to a green color to emphasise which one is 
+	currently clicked.-->
+<title>Alex's Tab Page</title>
+<tab-panel>
+  <div data-tabname="one">Tab one</div>
+  <div data-tabname="two">Tab two</div>
+  <div data-tabname="three">Tab three</div>
+</tab-panel>
+
+<script>
+	function asTabs(node) 
+	{
+		let tabs = Array.from(node.children).map(node => 
+		{
+			let button = document.createElement("button");
+			button.textContent = node.getAttribute("data-tabname");
+			let tab = {node, button};
+			button.addEventListener("click", () => selectTab(tab));
+			return tab;
+		});
+
+    let tabList = document.createElement("div");
+    for (let {button} of tabs)
+	{ 
+		tabList.appendChild(button);
+		node.insertBefore(tabList, node.firstChild);
+	}
+
+    function selectTab(selectedTab) 
+	{
+		for (let tab of tabs) 
+		{
+			let selected = tab == selectedTab;
+			tab.node.style.display = selected ? "" : "none";
+			tab.button.style.color = selected ? "green" : "";
+		}
+    }
+    selectTab(tabs[0]);
+  }
+asTabs(document.querySelector("tab-panel"));
+</script>

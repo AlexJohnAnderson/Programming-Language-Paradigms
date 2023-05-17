@@ -1,0 +1,81 @@
+
+<!--Html code that desribes the canvas space-->
+<canvas width="1400" height="450"></canvas>
+<script>
+
+//results and resultsTwo are the two data series that pie charts
+//are getting data from
+const results = [
+  {name: "Satisfied", count: 1027, color: "LightCoral"},
+  {name: "Neutral", count: 463, color: "LightPink"},
+  {name: "Unsatisfied", count: 510, color: "DarkOrchid"},
+  {name: "No comment", count: 102, color: "DarkSlateBlue"}
+  ];
+const resultsTwo = [
+  {name: "Very Satisfied", count: 63, color: "CornflowerBlue"},
+  {name: "Satisfied", count: 104, color: "LightCoral"},
+  {name: "Neutral", count: 56, color: "LightPink"},
+  {name: "Unsatisfied", count: 51, color: "DarkOrchid"},
+  {name: "Very Unsatisfied", count: 26, color: "DarkMagenta"},
+  {name: "No comment", count: 18, color: "DarkSlateBlue"}
+  ];
+//the first part of this code is context loader so the script
+//knows the parameters of the canvas. Next, total is set equal
+//to results and currentAngle is set equal to the top of the circle, or 90 degrees.
+//Finally the center of the pie chart is defined with centerx and centery
+  let cx = document.querySelector("canvas").getContext("2d");
+  let total = results
+    .reduce((sum, {count}) => sum + count, 0);
+  // Start at the top
+  let currentAngle = -0.5 * Math.PI;
+  let centerX = 300, centerY = 225;
+
+//this loop iterates until there are no more results left to be added to the pie
+//chart. FIrst this loop calculates the first slice's angle and draws the arc as well
+//as a line to the center of the pie chart. This is done for each slice of the pie charts
+//using the data from results. The pie chart is then filled in with the given color in results
+//After that, textx and texty are set to valaues that will go around the circle using
+//centerx and centery as a reperence. Then, filltext is called to write in the lables and values
+//of each slice.
+  for (let result of results) {
+      let sliceAngle = (result.count / total) * 2 * Math.PI;
+      cx.beginPath();
+      cx.arc(centerX, centerY, 100, currentAngle, currentAngle + sliceAngle);
+      currentAngle += sliceAngle;
+      cx.lineTo(centerX, centerY);
+      cx.fillStyle = result.color;
+      let middleAngle = currentAngle + 0.5 * sliceAngle * (-1);
+      let textX = Math.cos(middleAngle) * 190 + centerX;
+      let textY = Math.sin(middleAngle) * 150 + centerY;
+      cx.font = 'bold 8pt Calibri';
+      cx.fillText(result.name + ": " + result.count, textX, textY);
+      cx.fill();
+  }
+
+
+
+//This is the exact same code layout except this uses data from resultsTwo
+//The center of the piechart is also different here so we can see the
+//two separate charts without overlap.
+let cy = document.querySelector("canvas").getContext("2d");
+  let totalTwo = resultsTwo
+    .reduce((sum, {count}) => sum + count, 0);
+  // Start at the top
+  let currentAngleTwo = -0.5 * Math.PI;
+  let centerXTwo = 1000, centerYTwo = 225;
+
+  for (let result of resultsTwo) {
+      let sliceAngleTwo = (result.count / totalTwo) * 2 * Math.PI;
+      cy.beginPath();
+      cy.arc(centerXTwo, centerYTwo, 100, currentAngleTwo, currentAngleTwo + sliceAngleTwo);
+      currentAngleTwo += sliceAngleTwo;
+      cy.lineTo(centerXTwo, centerYTwo);
+      cy.fillStyle = result.color;
+      let middleAngleTwo = currentAngleTwo + 0.5 * sliceAngleTwo * (-1);
+      let textXTwo = Math.cos(middleAngleTwo) * 190 + centerXTwo;
+      let textYTwo = Math.sin(middleAngleTwo) * 150 + centerYTwo;
+      cy.font = 'bold 8pt Calibri';
+      cy.fillText(result.name + ": " + result.count, textXTwo, textYTwo);
+      cy.fill();
+  }
+</script>
